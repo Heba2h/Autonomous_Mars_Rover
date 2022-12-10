@@ -29,22 +29,13 @@ def rover_coords(binary_img):
     y_pixel = -(xpos - binary_img.shape[1]/2 ).astype(np.float)
     return x_pixel, y_pixel
 
-# objective function
-def objective(x,y, a, b, c):
- return a * x**2 + b*y +c
-# Define a function to convert to radial coords in rover space
-def to_polar_coords(x_pixel, y_pixel):
-    # Convert (x_pixel, y_pixel) to (distance, angle) 
-    # in polar coordinates in rover space
-    # Calculate distance to each pixel
-    dist = np.sqrt(x_pixel**2 + y_pixel**2)
-    # Calculate angle away from vertical for each pixel
-#     new_x,new_y=cv2.approxPolyDP()
-#     cv2.approxPolyDP(count, epsilon, True)
-#     cv2.drawContours(imageread, [approximations], 0, (0), 3)
-# #the name of the detected shapes are written on the image
-#     new_x, new_y = approximations[0][0]
-    angles = np.arctan2(y_pixel, x_pixel)
+#trying to implement curve fit region (not complete)
+    #     new_x,new_y=cv2.approxPolyDP()
+    #     cv2.approxPolyDP(count, epsilon, True)
+    #     cv2.drawContours(imageread, [approximations], 0, (0), 3)
+    # #the name of the detected shapes are written on the image
+    #     new_x, new_y = approximations[0][0]
+
     # load input variables from a file
     # x_values =x_pixel 
     # y_values = y_pixel
@@ -56,6 +47,16 @@ def to_polar_coords(x_pixel, y_pixel):
     #a, b, c = popt
     # use optimal parameters to calculate new values
     #y_new = objective(x_new, a, b, c)
+#end region
+
+# Define a function to convert to radial coords in rover space
+def to_polar_coords(x_pixel, y_pixel):
+    # Convert (x_pixel, y_pixel) to (distance, angle) 
+    # in polar coordinates in rover space
+    # Calculate distance to each pixel
+    dist = np.sqrt(x_pixel**2 + y_pixel**2)
+    # Calculate angle away from vertical for each pixel
+    angles = np.arctan2(y_pixel, x_pixel)
 
     return dist, angles
 
@@ -113,7 +114,7 @@ def perception_step(Rover):
     # Perform perception steps to update Rover()
     # TODO: 
     # NOTE: camera image is coming to you in Rover.img
-    dst_size = 5 
+    dst_size = 7
     bottom_offset = 6
     # 1) Define source and destination points for perspective transform
     source = np.float32([[14, 140], [301 ,140],[200, 96], [118, 96]])
