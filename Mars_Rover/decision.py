@@ -41,7 +41,7 @@ class PID:
         e_past=e
         return throttle_output
         
-pid=PID(10,0.7,0.01)
+pid=PID(5,0.75,0.03)
 
 
 # This is where you can build a decision tree for determining throttle, brake and steer 
@@ -99,6 +99,7 @@ def decision_step(Rover):
                 # If we're stopped but see sufficient navigable terrain in front then go!
                 if len(Rover.nav_angles) >= Rover.go_forward:
                     # Set throttle back to stored value
+                    longitudunal_Control = pid.get_longitudinal_control(np.array([Rover.pos[0],Rover.pos[1],Rover.nav_angles,Rover.vel]),Rover.max_vel,(1/25))
                     Rover.throttle = longitudunal_Control
                     # Release the brake
                     Rover.brake = 0
@@ -108,6 +109,7 @@ def decision_step(Rover):
     # Just to make the rover do something 
     # even if no modifications have been made to the code
     else:
+        longitudunal_Control = pid.get_longitudinal_control(np.array([Rover.pos[0],Rover.pos[1],Rover.nav_angles,Rover.vel]),Rover.max_vel,(1/25))
         Rover.throttle = longitudunal_Control
         Rover.steer = 0
         Rover.brake = 0
@@ -115,6 +117,15 @@ def decision_step(Rover):
     # If in a state where want to pickup a rock send pickup command
     if Rover.near_sample and Rover.vel == 0 and not Rover.picking_up:
         Rover.send_pickup = True
+
+    
+
+    #TODO:
+    # if located incremented 
+    # get rock coordinates 
+    # ha-set goal b pixel l rock 
+    # raise  near_sample , vel =0 
+
     
     return Rover
 
